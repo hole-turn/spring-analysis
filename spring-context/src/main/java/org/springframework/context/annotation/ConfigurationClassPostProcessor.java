@@ -231,7 +231,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	/**
 	 * Derive further bean definitions from the configuration classes in the registry.
 	 */
-	@Override
+	@Override // 把配置类里所有bean的定义信息导入进来
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
 		int registryId = System.identityHashCode(registry);
 		if (this.registriesPostProcessed.contains(registryId)) {
@@ -306,6 +306,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
 			if (!this.localBeanNameGeneratorSet) {
+				//获取创建一个internalConfigurationBeanNameGenerator来生成配置类的名字
 				BeanNameGenerator generator = (BeanNameGenerator) sbr.getSingleton(
 						AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR);
 				if (generator != null) {
@@ -320,6 +321,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Parse each @Configuration class
+		//由ConfigurationClassParser解析每一个配置类
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);

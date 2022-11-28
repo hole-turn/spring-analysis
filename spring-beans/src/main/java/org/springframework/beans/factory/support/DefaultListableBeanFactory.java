@@ -161,6 +161,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name. */
+	//所有BeanDefinition信息按照名字对应BeanDefinition关系都保存好了
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
 	/** Map from bean name to merged BeanDefinitionHolder. */
@@ -560,7 +561,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// Check all bean definitions.
 		for (String beanName : this.beanDefinitionNames) {
 			// Only consider bean as eligible if the bean name is not defined as alias for some other bean.
-			if (!isAlias(beanName)) {
+			if (!isAlias(beanName)) {//判断是否别名
 				try {
 					RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 					// Only check bean definition if it is complete.
@@ -941,6 +942,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
+					//不是FactoryBean就执行这个，普通的单实例非懒加载bean的创建
 					getBean(beanName);
 				}
 			}
